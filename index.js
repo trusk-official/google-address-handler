@@ -20,6 +20,10 @@ class AddressHandler {
     this.query = { place_id: placeid };
     return this;
   }
+  fromLatLon(lat, lon) {
+    this.query = { latlng: `${lat},${lon}` };
+    return this;
+  }
   toAddressObject() {
     return new Promise((resolve, reject) => {
       this.googleapis.route({
