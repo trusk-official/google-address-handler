@@ -1,37 +1,60 @@
 #!/usr/bin/env node
 
-const AddressHandler = require('../index');
+const {
+  googleApis,
+  objectToAddress,
+  fromLatlng,
+  fromAddress,
+  fromPlaceid,
+} = require('../index');
 
-const myAddressHandler = new AddressHandler({ token: 'GOOGLE_TOKEN' });
+const google_token = 'AIzaSyDaPAYeVqse7CfR6euboHdJbPWwMIn3uTU';
+const locale = 'en';
 
-console.log('Stringify an address object:\n');
+const GAInstance = googleApis(google_token)(locale);
 
-console.log(myAddressHandler.toAddressString({
-  street_number: '78',
-  postal_code: '75015',
-  route: 'Rue Olivier de Serres'
-}));
+const GAAddressQuerier = GAInstance(fromAddress);
+const GALatLngQuerier = GAInstance(fromLatlng);
+const GAPlaceIdQuerier = GAInstance(fromPlaceid);
 
-myAddressHandler
-.fromAddress('34 Avenue des Champs-Élysées, Paris')
-.toAddressObject()
-.then((data) => {
+GAAddressQuerier({ address: '34 Avenue des Champs-Élysées, Paris' })
+.then((d) => {
   console.log('\nGet an formatted object from address string :\n');
-  console.log(data);
+  console.log(d);
 });
 
-myAddressHandler
-.fromPlaceId('ChIJVyt59Ptx5kcRS23JkTij3eo')
-.toAddressObject()
-.then((data) => {
-  console.log('\nGet an formatted object from Google placeid :\n');
-  console.log(data);
-});
-
-myAddressHandler
-.fromLatLon(48.850579, 2.359645)
-.toAddressObject()
-.then((data) => {
+GALatLngQuerier({ lat: 48.850579, lon: 2.359645 })
+.then((d) => {
   console.log('\nGet an formatted object from lat,lon :\n');
-  console.log(data);
+  console.log(d);
 });
+
+GAPlaceIdQuerier({ placeid: 'ChIJVyt59Ptx5kcRS23JkTij3eo' })
+.then((d) => {
+  console.log('\nGet an formatted object from Google placeid :\n');
+  console.log(d);
+});
+
+// myAddressHandler
+// .fromAddress('34 Avenue des Champs-Élysées, Paris')
+// .toAddressObject()
+// .then((data) => {
+//   console.log('\nGet an formatted object from address string :\n');
+//   console.log(data);
+// });
+//
+// myAddressHandler
+// .fromPlaceId('ChIJVyt59Ptx5kcRS23JkTij3eo')
+// .toAddressObject()
+// .then((data) => {
+//   console.log('\nGet an formatted object from Google placeid :\n');
+//   console.log(data);
+// });
+//
+// myAddressHandler
+// .fromLatLon(48.850579, 2.359645)
+// .toAddressObject()
+// .then((data) => {
+//   console.log('\nGet an formatted object from lat,lon :\n');
+//   console.log(data);
+// });
