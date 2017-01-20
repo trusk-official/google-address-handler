@@ -34,27 +34,3 @@ GAPlaceIdQuerier({ placeid: 'ChIJVyt59Ptx5kcRS23JkTij3eo' })
   console.log('\nGet an formatted object from Google placeid :\n');
   console.log(d);
 });
-
-// myAddressHandler
-// .fromAddress('34 Avenue des Champs-Élysées, Paris')
-// .toAddressObject()
-// .then((data) => {
-//   console.log('\nGet an formatted object from address string :\n');
-//   console.log(data);
-// });
-//
-// myAddressHandler
-// .fromPlaceId('ChIJVyt59Ptx5kcRS23JkTij3eo')
-// .toAddressObject()
-// .then((data) => {
-//   console.log('\nGet an formatted object from Google placeid :\n');
-//   console.log(data);
-// });
-//
-// myAddressHandler
-// .fromLatLon(48.850579, 2.359645)
-// .toAddressObject()
-// .then((data) => {
-//   console.log('\nGet an formatted object from lat,lon :\n');
-//   console.log(data);
-// });
