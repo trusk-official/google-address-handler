@@ -30,7 +30,7 @@ const defaultFormatter = (body) => {
     place_id: null,
     postal_town: null
   };
-  if (Object.keys(body).length !== 0 && body.status !== 'ZERO_RESULTS') {
+  if (Object.keys(body).length !== 0 && body.status === 'OK') {
     address_array.address_string = body.results[0].formatted_address;
     body.results[0].address_components.forEach(function(address_component) {
       if(address_component.types.includes('street_number') && !address_array.street_number) {
@@ -59,7 +59,10 @@ const defaultFormatter = (body) => {
     address_array.place_id = body.results[0].place_id || null;
     return address_array;
   }
-  throw new Error('no_results');
+  if (body.status === 'ZERO_RESULTS') {
+    throw new Error('no_results');
+  }
+  throw new Error(body.error_message);
 };
 
 module.exports.fromLatlng = m => { return { latlng: `${m.lat},${m.lon}` } };
