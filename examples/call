@@ -8,7 +8,7 @@ const {
   fromPlaceid,
 } = require('../index');
 
-const google_token = 'AIzaSyDaPAYeVqse7CfR6euboHdJbPWwMIn3uTU';
+const google_token = '';
 const locale = 'en';
 
 const GAInstance = googleApis(google_token)(locale);
@@ -21,16 +21,19 @@ GAAddressQuerier({ address: '34 Avenue des Champs-Élysées, Paris' })
 .then((d) => {
   console.log('\nGet an formatted object from address string :\n');
   console.log(d);
-});
+})
+.catch(e => console.log("error", e))
 
 GALatLngQuerier({ lat: 48.850579, lon: 2.359645 })
 .then((d) => {
   console.log('\nGet an formatted object from lat,lon :\n');
   console.log(d);
-});
+})
+.catch(e => console.log("error", e))
 
 GAPlaceIdQuerier({ placeid: 'ChIJVyt59Ptx5kcRS23JkTij3eo' })
 .then((d) => {
   console.log('\nGet an formatted object from Google placeid :\n');
   console.log(d);
-});
+})
+.catch(e => console.log("error", e))
