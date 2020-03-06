@@ -1,4 +1,5 @@
 const axios = require("axios");
+const Boom = require("@hapi/boom");
 
 const googleapis = (token, locale = "fr") => {
   const api = axios.create({
@@ -26,9 +27,38 @@ module.exports.googleApis = token => locale => queryMaker => (
 ) =>
   googleapis(token, locale)
     .geocode(queryMaker(query))
+    .catch(e => e.response)
     .then(data => {
       if (data && data.data && data.data.status !== "OK") {
-        throw data.data;
+        const e = data.data;
+        const boomErrorTmpls = {
+          ZERO_RESULTS: {
+            message: "google_api_zero_results",
+            code: 404
+          },
+          OVER_QUERY_LIMIT: {
+            message: "google_api_over_query_limit",
+            code: 429
+          },
+          REQUEST_DENIED: {
+            message: "google_api_request_denied",
+            code: 400
+          },
+          INVALID_REQUEST: {
+            message: "google_api_invalid_request",
+            code: 422
+          },
+          UNKNOWN_ERROR: {
+            message: "google_api_unknown_error",
+            code: 530
+          }
+        };
+        const boomErrorTmpl =
+          boomErrorTmpls[e && e.status] ||
+          boomErrorTmpls["UNKNOWN_ERROR"];
+        throw Boom.boomify(new Error(boomErrorTmpl.message), {
+          statusCode: boomErrorTmpl.code
+        });
       }
       return data.data;
     })
