@@ -29,8 +29,8 @@ module.exports.googleApis = token => locale => queryMaker => (
     .geocode(queryMaker(query))
     .catch(e => e.response)
     .then(data => {
-      if (data && data.data && data.data.status !== "OK") {
-        const e = data.data;
+      if (!data || (data.data && data.data.status !== "OK")) {
+        const e = (data && data.data) || { status: "UNKNOWN_ERROR" };
         const boomErrorTmpls = {
           ZERO_RESULTS: {
             message: "google_api_zero_results",
@@ -54,8 +54,7 @@ module.exports.googleApis = token => locale => queryMaker => (
           }
         };
         const boomErrorTmpl =
-          boomErrorTmpls[e && e.status] ||
-          boomErrorTmpls["UNKNOWN_ERROR"];
+          boomErrorTmpls[e && e.status] || boomErrorTmpls["UNKNOWN_ERROR"];
         throw Boom.boomify(new Error(boomErrorTmpl.message), {
           statusCode: boomErrorTmpl.code
         });
